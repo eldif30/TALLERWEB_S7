@@ -1,0 +1,81 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>{% block titulo %} {{titulo}} {% endblock %}</title>
+	{% block css%} {% endblock %}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<a class="navbar-brand" href="#">CRUD</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse"
+						data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+						aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+						<div class="navbar-nav">
+							<a class="nav-link active" href="{% url 'index' %}">Inicio</a>
+							<a class="nav-link" href="{% url 'producto:crear_producto' %}">Crear Productos</a>
+							<a class="nav-link" href="{% url 'producto:listar_producto' %}">Listar Productos</a>
+							<a class="nav-link" href="{% url 'producto:crear_tipo' %}">Administrar tipos</a>
+							<a class="nav-link" href="{% url 'producto:crear_pedido' %}">Crear Pedido</a>
+							<a class="nav-link" href="{% url 'producto:pedidos' %}">Pedidos</a>
+							<a class="nav-link" href="{% url 'producto:seguimiento' %}">Seguimiento</a>
+							<a class="nav-link" href="{% url 'producto:gps' %}">GPS</a>
+							<a class="nav-link" href="{% url 'producto:chat' %}">Chat</a>
+							<a class="nav-link" href="{% url 'logout' %}">Salir</a>
+
+						</div>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</div>
+	{% block contenido %}
+	<div class="container">
+		<h1>Menú del Restaurante</h1>
+		{% for tipo, productos in productos_por_tipo.items %}
+		<section>
+			<h2>{{ tipo.nombre }}</h2>
+			<ul>
+				{% for producto in productos %}
+				<li>
+					<h3>{{ producto.nombre }}</h3>
+					<p>{{ producto.descripcion }}</p>
+					<p><strong>Precio:</strong> ${{ producto.precio }}</p>
+					{% if producto.imagen %}
+					<img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" width="200" />
+					{% endif %}
+				</li>
+				{% endfor %}
+			</ul>
+		</section>
+		{% endfor %}
+	</div>
+	
+	{% endblock %}
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+		integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+		integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+		crossorigin="anonymous"></script>
+	{% block js %} {% endblock %}
+</body>
+
+</html>

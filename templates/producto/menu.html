@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menú del Restaurante</title>
+  </head>
+  <body>
+    <div class="container">
+        <h1>Menú del Restaurante</h1>
+        {% for tipo, productos in productos_por_tipo.items %}
+        <section>
+            <h2>{{ tipo.nombre }}</h2> <!-- Nombre del tipo de producto -->
+            <ul>
+                {% for producto in productos %}
+                <li>
+                    <h3>{{ producto.nombre }}</h3>
+                    <p>{{ producto.descripcion }}</p>
+                    <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+                    {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" width="200" />
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% empty %}
+        <p>No hay productos disponibles en este momento.</p>
+        {% endfor %}
+    </div>
+    
+  </body>
+</html>

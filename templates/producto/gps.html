@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+{% block titulo %} GPS {% endblock %}
+{% block contenido %}
+<div class="container">
+    <h1>Seleccionar Ruta</h1>
+    <p>Haz clic en el mapa para seleccionar el punto de inicio y el punto de destino. La ruta se generará automáticamente.</p>
+    <div id="map" style="height: 500px; width: 100%;"></div>
+    <div class="mt-3">
+        <p><strong>Punto de Inicio:</strong> <span id="inicio"></span></p>
+        <p><strong>Punto de Destino:</strong> <span id="destino"></span></p>
+    </div>
+</div>
+
+<!-- Leaflet Styles and Scripts -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<!-- Leaflet Routing Machine -->
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+
+<!-- Leaflet Control Geocoder -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+<script>
+    var map = L.map('map').setView([40.7128, -74.0060], 13); // Coordenadas iniciales
+
+    // Agrega el mapa base
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    var inicioMarker, destinoMarker, routingControl;
+
+    // Selección de puntos en el mapa
+    map.on('click', function(e) {
+        if (!inicioMarker) {
+            // Seleccionar punto de inicio
+            inicioMarker = L.marker(e.latlng, { draggable: true }).addTo(map);
+            document.getElementById('inicio').innerText = e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5);
+            inicioMarker.on('dragend', function(event) {
+                var position = event.target.getLatLng();
+                document.getElementById('inicio').innerText = position.lat.toFixed(5) + ', ' + position.lng.toFixed(5);
+                actualizarRuta();
+            });
+        } else if (!destinoMarker) {
+            // Seleccionar punto de destino
+            destinoMarker = L.marker(e.latlng, { draggable: true }).addTo(map);
+            document.getElementById('destino').innerText = e.latlng.lat.toFixed(5) + ', ' + e.latlng.lng.toFixed(5);
+            destinoMarker.on('dragend', function(event) {
+                var position = event.target.getLatLng();
+                document.getElementById('destino').innerText = position.lat.toFixed(5) + ', ' + position.lng.toFixed(5);
+                actualizarRuta();
+            });
+            actualizarRuta();
+        }
+    });
+
+    // Función para generar la ruta
+    function actualizarRuta() {
+        if (inicioMarker && destinoMarker) {
+            var inicio = inicioMarker.getLatLng();
+            var destino = destinoMarker.getLatLng();
+
+            // Eliminar ruta existente
+            if (routingControl) {
+                map.removeControl(routingControl);
+            }
+
+            // Crear una nueva ruta
+            routingControl = L.Routing.control({
+                waypoints: [inicio, destino],
+                routeWhileDragging: true,
+                geocoder: L.Control.Geocoder.nominatim() // Corregido aquí
+            }).addTo(map);
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+
+{% block content %}
+<h2>Chat</h2>
+<div style="max-height: 400px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px;">
+    {% for mensaje in mensajes %}
+        <p><strong>{{ mensaje.usuario.username }}:</strong> {{ mensaje.contenido }}</p>
+    {% empty %}
+        <p>No hay mensajes todavía.</p>
+    {% endfor %}
+</div>
+<form method="post" style="margin-top: 20px;">
+    {% csrf_token %}
+    <textarea name="contenido" rows="3" style="width: 100%;" placeholder="Escribe tu mensaje aquí..."></textarea>
+    <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Enviar</button>
+</form>
+{% endblock %}

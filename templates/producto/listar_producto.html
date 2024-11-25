@@ -1,0 +1,69 @@
+{% extends 'index.html' %}
+
+{% block titulo %} Listar Productos {% endblock %}
+
+{% block contenido %}
+
+<h2>Productos en base</h2>
+{% if productos %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Disponible</th>
+                <th scope="col">Imagen</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <!-- Campo código (No editable si es clave primaria) -->
+                <td>{{ producto.codigo }}</td>
+                <!-- Campo nombre -->
+                <td><input type="text" name="nombre_{{ producto.codigo }}" value="{{ producto.nombre }}" class="form-control" /></td>
+                <!-- Campo tipo -->
+                <td>
+                    <select name="tipo_{{ producto.codigo }}" class="form-control">
+                        {% for tipo in tipos %}
+                        <option value="{{ tipo.id }}" {% if tipo == producto.tipo %}selected{% endif %}>
+                            {{ tipo.nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <!-- Campo descripción -->
+                <td><textarea name="descripcion_{{ producto.codigo }}" class="form-control">{{ producto.descripcion }}</textarea></td>
+                <!-- Campo precio -->
+                <td><input type="number" name="precio_{{ producto.codigo }}" value="{{ producto.precio }}" step="0.01" class="form-control" /></td>
+                <!-- Campo disponible -->
+                <td><input type="checkbox" name="disponible_{{ producto.codigo }}" {% if producto.disponible %}checked{% endif %} /></td>
+                <!-- Campo imagen -->
+                <td>
+                    {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" width="50" />
+                    {% endif %}
+                    <input type="file" name="imagen_{{ producto.codigo }}" class="form-control-file" />
+                </td>
+                <!-- Acciones -->
+                <td>
+                    <button type="submit" name="guardar_{{ producto.codigo }}" class="btn btn-success">Guardar</button>
+                    <a href="{% url 'producto:eliminar_producto' producto.codigo %}" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+{% else %}
+<p>Lo siento, no hay productos en la base de datos.</p>
+{% endif %}
+<a href="../inicio" class="btn btn-secondary">Volver al inicio</a>
+
+{% endblock %}
