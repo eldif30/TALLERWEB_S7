@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import chat_view, CrearProductoView, ListarProductoView, EliminarPedidoView, EditarProductoView, EditarPedidoView, EliminarProductoView, CrearTipoView, SeguimientoView, GPSView, crear_pedido, ListarPedidoView
+from .views import chat_view, CrearProductoView, ListarProductoView, EliminarPedidoView, EditarProductoView, EditarPedidoView, EliminarProductoView, CrearTipoView, GPSView, crear_pedido, ListarPedidoView
 
 
 # Creación de los paths
@@ -11,7 +11,6 @@ urlpatterns = [
     path('eliminar_producto/<int:pk>',
          EliminarProductoView.as_view(), name='eliminar_producto'),
     path('crear_tipo', CrearTipoView.as_view(), name='crear_tipo'),
-    path('seguimiento/', SeguimientoView.as_view(), name='seguimiento'),
     path('gps/', GPSView.as_view(), name='gps'),
     path('crear_pedido/', crear_pedido, name='crear_pedido'),
     path('pedidos/', ListarPedidoView.as_view(), name='pedidos'),

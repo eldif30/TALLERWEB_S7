@@ -151,12 +151,6 @@ class MenuView(ListView):
         }
         return context
 
-
-# Vista para Seguimiento
-@method_decorator(login_required, name='dispatch')
-class SeguimientoView(TemplateView):
-    template_name = 'producto/seguimiento.html'
-
 # Vista para GPS
 @method_decorator(login_required, name='dispatch')
 class GPSView(TemplateView):
